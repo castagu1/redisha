@@ -16,15 +16,15 @@ EOF
 
 
 if [ -n "$SLAVEOF" ]; then
-	redis_cmd="nohup redis-server --bind 0.0.0.0 --port $PORT --slaveof $SLAVEOF --logfile /etc/redis/redis-server.log > /dev/null 2>&1 &"
+	redis_cmd="nohup redis-server --maxmemory 2gb --bind 0.0.0.0 --port $PORT --slaveof $SLAVEOF --logfile /etc/redis/redis-server.log > /dev/null 2>&1 &"
 else
-	redis_cmd="nohup redis-server --bind 0.0.0.0 --port $PORT --logfile /etc/redis/redis-server.log > /dev/null 2>&1 &"
+	redis_cmd="nohup redis-server --maxmemory 2gb --bind 0.0.0.0 --port $PORT --logfile /etc/redis/redis-server.log > /dev/null 2>&1 &"
 fi
 
 if [ -n "$SENTINEL_MASTER_HOST" ]; then
 	echo $redis_cmd$'\n nohup redis-server /etc/redis/sentinel.conf --sentinel  > /dev/null 2>&1 &' > /etc/redis/start_redis
 else
-	echo "$redis_cmd" > /etc/redis/start_redis 
+	echo "$redis_cmd" > /etc/redis/start_redis
 
 fi
 
