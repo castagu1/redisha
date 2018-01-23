@@ -7,6 +7,8 @@ services:
         image: centos-redisha
         tty: true
         stdin_open: true
+        volumes:
+          - "./redis_1:/etc/redis"
         ports:
             - '6379:6379'
         command: /bin/bash
@@ -25,7 +27,9 @@ services:
         image: centos-redisha
         tty: true
         stdin_open: true
-        command: /bin/bash 
+        volumes:
+          - "./redis_2:/etc/redis"
+        command: /bin/bash
         networks:
             static-network:
                 ipv4_address: 172.30.0.12
@@ -33,11 +37,11 @@ services:
             - '6380:6379'
         environment:
             - PORT=6379
-            - SLAVEOF=redis_1 6379  
+            - SLAVEOF=redis_1 6379
             - SENTINEL_MASTER_HOST=redis_1 6379
             - SENTINEL_QUORUM=2
             - SENTINEL_DOWN_AFTER=5000
-            - SENTINEL_FAILOVER=5000            
+            - SENTINEL_FAILOVER=5000
         depends_on:
             - redis_1
     redis_3:
@@ -46,7 +50,9 @@ services:
         image: centos-redisha
         tty: true
         stdin_open: true
-        command: /bin/bash 
+        volumes:
+          - "./redis_3:/etc/redis"
+        command: /bin/bash
         networks:
             static-network:
                 ipv4_address: 172.30.0.13
@@ -54,15 +60,15 @@ services:
             - '6381:6379'
         environment:
             - PORT=6379
-            - SLAVEOF=redis_1 6379  
+            - SLAVEOF=redis_1 6379
             - SENTINEL_MASTER_HOST=redis_1 6379
             - SENTINEL_QUORUM=2
             - SENTINEL_DOWN_AFTER=5000
-            - SENTINEL_FAILOVER=5000            
+            - SENTINEL_FAILOVER=5000
         depends_on:
             - redis_1
 networks:
   static-network:
     ipam:
       config:
-        - subnet: 172.30.0.0/16    
+        - subnet: 172.30.0.0/16
