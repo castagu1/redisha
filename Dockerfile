@@ -11,6 +11,7 @@ RUN cd /usr/local/bin/redis/redis-4.0.6/deps && make hiredis jemalloc linenoise 
 RUN cd /usr/local/bin/redis/redis-4.0.6 && make install
 
 COPY createSentinelConfigFile.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/createSentinelConfigFile.sh
 COPY start_redis /usr/local/bin/
 RUN mkdir -p /etc/redis
 ENTRYPOINT createSentinelConfigFile.sh && start_redis && /bin/bash
